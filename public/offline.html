@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>وضع عدم الاتصال | ليرن ويب - Lern Web Offline</title>
+    <meta name="theme-color" content="#090d16" />
+    <style>
+      :root {
+        --bg-primary: #020617;
+        --bg-card: rgba(15, 23, 42, 0.88);
+        --border-color: rgba(51, 65, 85, 0.65);
+        --accent-blue: #2563eb;
+        --accent-cyan: #06b6d4;
+        --accent-emerald: #10b981;
+        --accent-amber: #f59e0b;
+        --accent-rose: #f43f5e;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        background-color: var(--bg-primary);
+        background-image:
+          radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.16), transparent 40%),
+          radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.12), transparent 40%);
+        color: var(--text-main);
+        font-family: 'Cairo', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        line-height: 1.6;
+      }
+
+      .offline-container {
+        width: 100%;
+        max-width: 640px;
+        background: var(--bg-card);
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--border-color);
+        border-radius: 1.75rem;
+        padding: 2.25rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.65);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.75rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(51, 65, 85, 0.45);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .brand-badge {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 1.2rem;
+        color: #fff;
+        box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.5);
+      }
+
+      .brand-title {
+        font-weight: 800;
+        font-size: 1.1rem;
+        letter-spacing: -0.01em;
+      }
+
+      .brand-sub {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+      }
+
+      .lang-btn {
+        background: rgba(30, 41, 59, 0.8);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .lang-btn:hover {
+        background: rgba(51, 65, 85, 0.8);
+        border-color: var(--accent-blue);
+      }
+
+      .hero-icon-wrapper {
+        width: 84px;
+        height: 84px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        background: rgba(244, 63, 94, 0.12);
+        border: 1px solid rgba(244, 63, 94, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .hero-icon-wrapper.online {
+        background: rgba(16, 185, 129, 0.12);
+        border-color: rgba(16, 185, 129, 0.35);
+      }
+
+      .pulse-ring {
+        position: absolute;
+        inset: -6px;
+        border-radius: 50%;
+        border: 2px solid rgba(244, 63, 94, 0.35);
+        animation: pulseRing 2.2s infinite ease-out;
+      }
+
+      @keyframes pulseRing {
+        0% { transform: scale(0.92); opacity: 0.85; }
+        100% { transform: scale(1.25); opacity: 0; }
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        background: rgba(245, 158, 11, 0.14);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        margin-bottom: 1rem;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #fbbf24;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.65rem;
+        font-weight: 900;
+        margin-bottom: 0.65rem;
+        color: #ffffff;
+      }
+
+      .description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        max-width: 500px;
+        margin: 0 auto 1.75rem;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.85rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .info-card {
+        background: rgba(2, 6, 23, 0.65);
+        border: 1px solid rgba(51, 65, 85, 0.5);
+        border-radius: 1rem;
+        padding: 1rem;
+      }
+
+      .info-card-title {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #cbd5e1;
+        margin-bottom: 0.35rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .info-card-desc {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        padding: 0.85rem 1.4rem;
+        border-radius: 0.95rem;
+        font-weight: 800;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s ease;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent-blue), #1d4ed8);
+        color: #ffffff;
+        box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.55);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.08);
+      }
+
+      .btn-secondary {
+        background: rgba(30, 41, 59, 0.85);
+        color: #e2e8f0;
+        border: 1px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: rgba(51, 65, 85, 0.75);
+      }
+
+      .footer-meta {
+        text-align: center;
+        font-size: 0.75rem;
+        color: #64748b;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(51, 65, 85, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .toast-msg {
+        display: none;
+        margin-top: 0.85rem;
+        padding: 0.7rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .toast-msg.show {
+        display: block;
+      }
+
+      .toast-msg.error {
+        background: rgba(244, 63, 94, 0.15);
+        color: #fda4af;
+        border: 1px solid rgba(244, 63, 94, 0.3);
+      }
+
+      .toast-msg.success {
+        background: rgba(16, 185, 129, 0.15);
+        color: #6ee7b7;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="offline-container">
+      <div class="top-bar">
+        <div class="brand">
+          <div class="brand-badge">LW</div>
+          <div>
+            <div class="brand-title" id="brandName">ليرن ويب | Lern Web</div>
+            <div class="brand-sub" id="brandSub">محرك الحماية والتشغيل بدون إنترنت (PWA Engine)</div>
+          </div>
+        </div>
+        <button type="button" class="lang-btn" id="langToggle" onclick="toggleLanguage()">English</button>
+      </div>
+
+      <div class="text-center">
+        <div class="hero-icon-wrapper" id="iconWrapper">
+          <div class="pulse-ring" id="pulseRing"></div>
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="statusSvg">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+            <line x1="12" y1="20" x2="12.01" y2="20"></line>
+          </svg>
+        </div>
+
+        <div class="status-pill" id="statusBadge">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">انقطع الاتصال بالشبكة • وضع الأوفلاين نشط</span>
+        </div>
+
+        <h1 id="mainHeading">أنت الآن في وضع عدم الاتصال بالإنترنت</h1>
+        <p class="description" id="mainDesc">
+          تعذر الوصول إلى الخادم في الوقت الحالي. لا تقلق، كافة مسوداتك وبياناتك المحلية محفوظة بأمان عبر محرك Lern Web PWA، وسيتم استئناف المزامنة تلقائياً فور عودة الشبكة.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-card-title">
+            <span>🛡️</span>
+            <span id="card1Title">حفظ تلقائي للمسودات</span>
+          </div>
+          <div class="info-card-desc" id="card1Desc">
+            يتم الاحتفاظ ببياناتك وتعديلاتك في الذاكرة المحلية للمتصفح دون فقدان أي تغييرات.
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-card-title">
+            <span>⚡</span>
+            <span id="card2Title">استعادة ذكية للاتصال</span>
+          </div>
+          <div class="info-card-desc" id="card2Desc">
+            يقوم النظام بفحص الشبكة تلقائياً وسيعيد توجيهك للمنصة فور استقرار الاتصال.
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-primary" onclick="checkConnectionAndReload()">
+          <span id="retryBtnText">إعادة المحاولة وفحص الاتصال</span>
+        </button>
+        <a href="/" class="btn btn-secondary" id="homeBtnText">
+          العودة للواجهة المخزنة مؤقتاً
+        </a>
+      </div>
+
+      <div id="feedbackToast" class="toast-msg"></div>
+
+      <div class="footer-meta">
+        <span id="swVersionLabel">Service Worker: LernWeb Offline Guard v1.1</span>
+        <span id="lastCheckedLabel">فحص تلقائي نشط</span>
+      </div>
+    </main>
+
+    <script>
+      let currentLang = 'ar';
+
+      const dict = {
+        ar: {
+          dir: 'rtl',
+          langBtn: 'English',
+          brandSub: 'محرك الحماية والتشغيل بدون إنترنت (PWA Engine)',
+          statusOffline: 'انقطع الاتصال بالشبكة • وضع الأوفلاين نشط',
+          statusOnline: 'تمت استعادة الاتصال بالإنترنت بنجاح!',
+          heading: 'أنت الآن في وضع عدم الاتصال بالإنترنت',
+          desc: 'تعذر الوصول إلى الخادم في الوقت الحالي. لا تقلق، كافة مسوداتك وبياناتك المحلية محفوظة بأمان عبر محرك Lern Web PWA، وسيتم استئناف المزامنة تلقائياً فور عودة الشبكة.',
+          card1Title: 'حفظ تلقائي للمسودات',
+          card1Desc: 'يتم الاحتفاظ ببياناتك وتعديلاتك في الذاكرة المحلية للمتصفح دون فقدان أي تغييرات.',
+          card2Title: 'استعادة ذكية للاتصال',
+          card2Desc: 'يقوم النظام بفحص الشبكة تلقائياً وسيعيد توجيهك للمنصة فور استقرار الاتصال.',
+          retryBtn: 'إعادة المحاولة وفحص الاتصال',
+          homeBtn: 'العودة للواجهة المخزنة مؤقتاً',
+          checking: 'جاري فحص الاتصال بالخادم...',
+          stillOffline: 'لا يزال الاتصال مقطوعاً. يرجى التحقق من شبكة Wi-Fi أو بيانات الهاتف.',
+          reconnected: 'عاد الاتصال! جاري تحويلك إلى المنصة...',
+          lastChecked: 'فحص تلقائي نشط'
+        },
+        en: {
+          dir: 'ltr',
+          langBtn: 'العربية',
+          brandSub: 'PWA Offline Protection & Cache Engine',
+          statusOffline: 'Network Disconnected • Offline Fallback Active',
+          statusOnline: 'Internet Connection Restored!',
+          heading: 'You Are Currently Offline',
+          desc: 'Unable to reach the server right now. Your local drafts and cached resources remain safely stored by the Lern Web PWA engine and will sync automatically once you are back online.',
+          card1Title: 'Local Draft Preservation',
+          card1Desc: 'Your workspace configurations and local data are safely persisted in browser storage.',
+          card2Title: 'Smart Auto-Reconnect',
+          card2Desc: 'We continuously monitor network status and reload the workspace when connectivity returns.',
+          retryBtn: 'Retry & Check Connection',
+          homeBtn: 'Open Cached App Shell',
+          checking: 'Checking server connectivity...',
+          stillOffline: 'Still offline. Please check your Wi-Fi or mobile data connection.',
+          reconnected: 'Connection restored! Redirecting to Lern Web...',
+          lastChecked: 'Auto-monitoring active'
+        }
+      };
+
+      function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        const t = dict[currentLang];
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = t.dir;
+        document.getElementById('langToggle').textContent = t.langBtn;
+        document.getElementById('brandSub').textContent = t.brandSub;
+        document.getElementById('statusText').textContent = navigator.onLine ? t.statusOnline : t.statusOffline;
+        document.getElementById('mainHeading').textContent = t.heading;
+        document.getElementById('mainDesc').textContent = t.desc;
+        document.getElementById('card1Title').textContent = t.card1Title;
+        document.getElementById('card1Desc').textContent = t.card1Desc;
+        document.getElementById('card2Title').textContent = t.card2Title;
+        document.getElementById('card2Desc').textContent = t.card2Desc;
+        document.getElementById('retryBtnText').textContent = t.retryBtn;
+        document.getElementById('homeBtnText').textContent = t.homeBtn;
+        document.getElementById('lastCheckedLabel').textContent = t.lastChecked;
+      }
+
+      function showFeedback(msg, type) {
+        const el = document.getElementById('feedbackToast');
+        el.textContent = msg;
+        el.className = 'toast-msg show ' + type;
+      }
+
+      async function checkConnectionAndReload() {
+        const t = dict[currentLang];
+        showFeedback(t.checking, 'success');
+        try {
+          const response = await fetch('/manifest.json?_t=' + Date.now(), { cache: 'no-store' });
+          if (response.ok) {
+            showFeedback(t.reconnected, 'success');
+            setTimeout(() => {
+              window.location.href = '/';
+            }, 600);
+            return;
+          }
+        } catch (err) {
+          // Network still unreachable
+        }
+        showFeedback(t.stillOffline, 'error');
+      }
+
+      window.addEventListener('online', () => {
+        const t = dict[currentLang];
+        document.getElementById('statusText').textContent = t.statusOnline;
+        document.getElementById('iconWrapper').classList.add('online');
+        showFeedback(t.reconnected, 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+      });
+    </script>
+  </body>
+</html>
