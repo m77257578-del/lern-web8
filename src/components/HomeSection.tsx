@@ -116,7 +116,7 @@ export default function HomeSection({
       </section>
 
       {/* Quick Navigation Hub */}
-      <section aria-label="Quick Hub" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+      <section aria-label="Quick Hub" className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {[
           {
             id: 'store',
@@ -126,6 +126,24 @@ export default function HomeSection({
             descEn: 'Browse all ready platforms',
             icon: Layers,
             color: 'from-blue-600/20 to-indigo-600/20 border-blue-500/30 text-blue-400'
+          },
+          {
+            id: 'sandbox',
+            titleAr: 'محاكي الساندبوكس',
+            titleEn: 'Live Sandbox',
+            descAr: 'جرب المنصات مباشرة',
+            descEn: 'Interactive live simulator',
+            icon: Play,
+            color: 'from-cyan-600/20 to-blue-600/20 border-cyan-500/30 text-cyan-400'
+          },
+          {
+            id: 'enterprise-suite',
+            titleAr: 'المنظومة المؤسسية',
+            titleEn: 'Enterprise ERP',
+            descAr: 'بنك الأسئلة والمناهج والـ CRM',
+            descEn: 'Q-Bank, ERP, Finance & CRM',
+            icon: Cpu,
+            color: 'from-indigo-600/20 to-purple-600/20 border-indigo-500/30 text-indigo-400'
           },
           {
             id: 'published-projects',
